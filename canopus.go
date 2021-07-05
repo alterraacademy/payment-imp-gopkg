@@ -61,11 +61,6 @@ func CartPayloadToCanopus(cart CartPayload) canopusgo.CartPayload {
 	result.CustomerDetails.ShippingAddress.City = cart.CustomerDetail.ShippingAddress.City
 	result.CustomerDetails.ShippingAddress.PostalCode = cart.CustomerDetail.ShippingAddress.PostalCode
 
-	result.Environment.Agent = cart.Environment.Agent
-	result.Environment.Mode = cart.Environment.Mode
-	result.Environment.Os = cart.Environment.Os
-	result.Environment.Version = cart.Environment.Version
-
 	result.URL.ReturnURL = cart.Callback.Return
 	result.URL.CancelURL = cart.Callback.Cancel
 	result.URL.NotificationURL = cart.Callback.Success
