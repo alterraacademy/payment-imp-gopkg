@@ -1,5 +1,7 @@
 github.com/alterraacademy/canopus-gopkg v1.0.3 h1:bpuQdbyCxq2cuVMqZ23ZsnC8EdzRu8xT4b+Alta5MjI=
 github.com/alterraacademy/canopus-gopkg v1.0.3/go.mod h1:1EMlXK37OxNp9kXRWZ22XWMSs/4ZfoUqr2TyTpc/vWw=
+github.com/alterraacademy/canopus-gopkg v1.0.4 h1:J0+rHxNWeZQeSxEWWfedf/W6NVnUbGKzAS3rwxPVEeA=
+github.com/alterraacademy/canopus-gopkg v1.0.4/go.mod h1:1EMlXK37OxNp9kXRWZ22XWMSs/4ZfoUqr2TyTpc/vWw=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-playground/assert/v2 v2.0.1/go.mod h1:VDjEfimB/XKnb+ZQfWdccd7VUvScMdVu0Titje2rxJ4=
 github.com/go-playground/locales v0.13.0 h1:HyWk6mgj5qFqCT5fjGBuRArbVDfE4hi8+e8ceBS/t7Q=
