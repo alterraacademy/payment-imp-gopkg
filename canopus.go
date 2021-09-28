@@ -45,11 +45,11 @@ func CartPayloadToCanopus(cart CartPayload) canopusgo.CartPayload {
 	result.CustomerDetails.FirstName = cart.CustomerDetail.FirstName
 	result.CustomerDetails.LastName = cart.CustomerDetail.LastName
 	result.CustomerDetails.Email = cart.CustomerDetail.Email
-	result.CustomerDetails.Phone = cart.CustomerDetail.Phone
+	result.CustomerDetails.Phone = convertPhoneNumber(cart.CustomerDetail.Phone)
 
+	result.CustomerDetails.BillingAddress.Phone = convertPhoneNumber(cart.CustomerDetail.BillingAddress.Phone)
 	result.CustomerDetails.BillingAddress.FirstName = cart.CustomerDetail.BillingAddress.FirstName
 	result.CustomerDetails.BillingAddress.LastName = cart.CustomerDetail.BillingAddress.LastName
-	result.CustomerDetails.BillingAddress.Phone = cart.CustomerDetail.BillingAddress.Phone
 	result.CustomerDetails.BillingAddress.Address = cart.CustomerDetail.BillingAddress.Address
 	result.CustomerDetails.BillingAddress.City = cart.CustomerDetail.BillingAddress.City
 	result.CustomerDetails.BillingAddress.PostalCode = cart.CustomerDetail.BillingAddress.PostalCode
@@ -97,4 +97,16 @@ func CartResponseFromCanopus(resp canopusgo.CartResponse) CartResponse {
 	result.Number = resp.Number
 
 	return result
+}
+
+func convertPhoneNumber(phoneNumb string) string {
+	if len(phoneNumb) == 0 {
+		return phoneNumb
+	}
+
+	if string(phoneNumb[0]) != "0" {
+		return "0" + phoneNumb
+	}
+
+	return phoneNumb
 }
