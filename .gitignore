@@ -71,3 +71,4 @@ Temporary Items
 main
 *.pem
 *.key
+app/
