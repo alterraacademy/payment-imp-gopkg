@@ -3,6 +3,8 @@ package paymentgo
 import (
 	canopusgo "github.com/alterraacademy/canopus-gopkg"
 	canopusConfig "github.com/alterraacademy/canopus-gopkg/config"
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/coreapi"
 )
 
 type PaymentContract interface {
@@ -10,7 +12,7 @@ type PaymentContract interface {
 	CreateCart(cart CartPayload, method PaymentMethod) (CartResponse, error)
 }
 
-func InitPayment(paymentType PaymentType, init CanopusService) PaymentContract {
+func InitPayment(paymentType PaymentType, init CanopusService, mTransServ MidtransService) PaymentContract {
 	if paymentType == Canopus {
 		canopusConfig.DefaultAPIType = canopusConfig.API
 		if init.CanopusType == CanopusSNAP {
@@ -28,7 +30,19 @@ func InitPayment(paymentType PaymentType, init CanopusService) PaymentContract {
 		return &Payment{
 			Canopus: paymentClient,
 		}
+	}
 
+	if paymentType == Midtrans {
+		mTransClient := coreapi.Client{}
+		environment := midtrans.Production
+		if mTransServ.Sandbox {
+			environment = midtrans.Sandbox
+		}
+		mTransClient.New(mTransServ.ServerKey, environment)
+
+		return &MidtransPayment{
+			Client: mTransClient,
+		}
 	}
 
 	return nil

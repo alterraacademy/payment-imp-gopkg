@@ -12,6 +12,13 @@ type CanopusService struct {
 	TimeOut     time.Duration
 }
 
+type MidtransService struct {
+	Sandbox    bool
+	ServerKey  string
+	ClientKey  string
+	MerchantID string
+}
+
 // PaymentMethod ...
 type PaymentMethod struct {
 	From        string
@@ -65,9 +72,9 @@ type CartPayload struct {
 		Version string
 	}
 	Callback struct {
-		Return  string
-		Cancel  string
-		Success string
+		Return string
+		Cancel string
+		Hook   string
 	}
 	ExtendInfo struct {
 		AdditionalPrefix string
