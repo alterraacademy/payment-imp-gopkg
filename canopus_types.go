@@ -63,7 +63,7 @@ func CartPayloadToCanopus(cart CartPayload) canopusgo.CartPayload {
 
 	result.URL.ReturnURL = cart.Callback.Return
 	result.URL.CancelURL = cart.Callback.Cancel
-	result.URL.NotificationURL = cart.Callback.Success
+	result.URL.NotificationURL = cart.Callback.Hook
 
 	result.ExtendInfo.AdditionalPrefix = cart.ExtendInfo.AdditionalPrefix
 

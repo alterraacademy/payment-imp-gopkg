@@ -2,16 +2,17 @@ package paymentgo
 
 import "errors"
 
-type PaymentType uint8
+type PaymentType string
 
 const (
-	_ PaymentType = iota
-	Canopus
+	Canopus  PaymentType = "canopus"
+	Midtrans PaymentType = "midtrans"
 
 	CanopusSNAP = "snap"
 	CanopusAPI  = "api"
 )
 
 var (
-	ErrNoCanopusService = errors.New("no canopus service yet, please init first")
+	ErrNoCanopusService  = errors.New("no canopus service yet, please init first")
+	ErrNoMidtransService = errors.New("no midtrans service yet, please init first")
 )
