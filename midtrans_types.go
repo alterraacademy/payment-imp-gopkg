@@ -55,6 +55,11 @@ func CartPayloadToMidtrans(cart CartPayload) *coreapi.ChargeReq {
 		chargeReq.BankTransfer = &coreapi.BankTransferDetails{
 			Bank: midtrans.Bank(cart.CartDetail.Payment.Key),
 		}
+	case coreapi.PaymentTypeCreditCard:
+		chargeReq.CreditCard = &coreapi.CreditCardDetails{
+			TokenID:        cart.CartDetail.Payment.Key,
+			Authentication: true,
+		}
 	default:
 		return &coreapi.ChargeReq{}
 	}
@@ -104,6 +109,12 @@ func CartResponseFromMidtrans(resp coreapi.ChargeResponse) (CartResponse, error)
 	if strings.Contains(strings.ToLower(resp.StatusMessage), "permata") {
 		bank = "permata"
 		number = resp.PermataVaNumber
+	}
+
+	if resp.PaymentType == string(coreapi.PaymentTypeCreditCard) {
+		link = resp.RedirectURL
+		bank = resp.Bank
+		number = resp.MaskedCard
 	}
 
 	return CartResponse{

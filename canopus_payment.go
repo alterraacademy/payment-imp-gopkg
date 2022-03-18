@@ -1,6 +1,8 @@
 package paymentgo
 
 import (
+	"errors"
+
 	canopusgo "github.com/alterraacademy/canopus-gopkg"
 )
 
@@ -37,4 +39,8 @@ func (pay *Payment) CreateCart(cart CartPayload, method PaymentMethod) (CartResp
 	}
 
 	return CartResponseFromCanopus(cano), nil
+}
+
+func (pay *Payment) CardRegister(cc CreditCard) (string, error) {
+	return "", errors.New("not yet implement")
 }

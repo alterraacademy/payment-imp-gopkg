@@ -101,3 +101,10 @@ type CartResponse struct {
 	Bank   string
 	Number string
 }
+
+type CreditCard struct {
+	CardNumber string
+	ExpMonth   int
+	ExpYear    int
+	CVV        int
+}

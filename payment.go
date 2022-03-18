@@ -10,6 +10,7 @@ import (
 type PaymentContract interface {
 	GetAvailableMethod(amount float64) ([]PaymentMethod, error)
 	CreateCart(cart CartPayload, method PaymentMethod) (CartResponse, error)
+	CardRegister(cc CreditCard) (string, error)
 }
 
 func InitPayment(paymentType PaymentType, init CanopusService, mTransServ MidtransService) PaymentContract {

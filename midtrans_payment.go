@@ -1,6 +1,9 @@
 package paymentgo
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
 )
@@ -42,6 +45,11 @@ func (mtrans *MidtransPayment) GetAvailableMethod(amount float64) ([]PaymentMeth
 			Name: "VA BRI",
 			Key:  string(midtrans.BankBri),
 		},
+		{
+			Type: string(coreapi.PaymentTypeCreditCard),
+			Name: "Credit Card",
+			Key:  string(coreapi.PaymentTypeCreditCard),
+		},
 	}, nil
 }
 
@@ -56,4 +64,18 @@ func (mtrans *MidtransPayment) CreateCart(cart CartPayload, method PaymentMethod
 	}
 
 	return CartResponseFromMidtrans(*result)
+}
+
+func (mtrans *MidtransPayment) CardRegister(cc CreditCard) (string, error) {
+	if mtrans.Client == (coreapi.Client{}) {
+		return "", ErrNoMidtransService
+	}
+
+	cvv := fmt.Sprintf("%d", cc.CVV)
+
+	resp, err := mtrans.Client.CardToken(cc.CardNumber, cc.ExpMonth, cc.ExpYear, cvv, midtrans.ClientKey)
+	if err != nil {
+		return "", errors.New("error get card token : " + err.GetMessage())
+	}
+	return resp.TokenID, nil
 }
