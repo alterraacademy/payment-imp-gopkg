@@ -3,6 +3,7 @@ package paymentgo
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
@@ -53,17 +54,29 @@ func (mtrans *MidtransPayment) GetAvailableMethod(amount float64) ([]PaymentMeth
 	}, nil
 }
 
-func (mtrans *MidtransPayment) CreateCart(cart CartPayload, method PaymentMethod) (CartResponse, error) {
+func (mtrans *MidtransPayment) CreateCart(cart CartPayload, method PaymentMethod, ccToken string) (CartResponse, error) {
 	if mtrans.Client == (coreapi.Client{}) {
 		return CartResponse{}, ErrNoMidtransService
 	}
 	mtrans.Client.Options.SetPaymentOverrideNotification(cart.Callback.Hook)
-	result, err := mtrans.Client.ChargeTransaction(CartPayloadToMidtrans(cart))
-	if err != nil {
-		return CartResponse{}, err.RawError
+	midCart := CartPayloadToMidtrans(cart)
+	if ccToken != "" {
+		midCart.CreditCard = &coreapi.CreditCardDetails{
+			TokenID:        ccToken,
+			Authentication: true,
+		}
 	}
 
-	return CartResponseFromMidtrans(*result)
+	result, err := mtrans.Client.ChargeTransaction(midCart)
+	if err != nil {
+		str := err.GetMessage()
+		strSlice := strings.Split(str, ".")
+		return CartResponse{}, errors.New(strSlice[0])
+	}
+
+	resp, newErr := CartResponseFromMidtrans(*result)
+
+	return resp, newErr
 }
 
 func (mtrans *MidtransPayment) CardRegister(cc CreditCard) (string, error) {
@@ -73,7 +86,7 @@ func (mtrans *MidtransPayment) CardRegister(cc CreditCard) (string, error) {
 
 	cvv := fmt.Sprintf("%d", cc.CVV)
 
-	resp, err := mtrans.Client.CardToken(cc.CardNumber, cc.ExpMonth, cc.ExpYear, cvv, midtrans.ClientKey)
+	resp, err := mtrans.Client.CardToken(cc.CardNumber, cc.ExpMonth, cc.ExpYear, cvv, mtrans.Client.ClientKey)
 	if err != nil {
 		return "", errors.New("error get card token : " + err.GetMessage())
 	}

@@ -27,7 +27,7 @@ func (pay *Payment) GetAvailableMethod(amount float64) ([]PaymentMethod, error) 
 	return result, nil
 }
 
-func (pay *Payment) CreateCart(cart CartPayload, method PaymentMethod) (CartResponse, error) {
+func (pay *Payment) CreateCart(cart CartPayload, method PaymentMethod, ccToken string) (CartResponse, error) {
 	if pay.Canopus == nil {
 		return CartResponse{}, ErrNoCanopusService
 	}

@@ -9,7 +9,7 @@ import (
 
 type PaymentContract interface {
 	GetAvailableMethod(amount float64) ([]PaymentMethod, error)
-	CreateCart(cart CartPayload, method PaymentMethod) (CartResponse, error)
+	CreateCart(cart CartPayload, method PaymentMethod, ccToken string) (CartResponse, error)
 	CardRegister(cc CreditCard) (string, error)
 }
 
@@ -41,6 +41,7 @@ func InitPayment(paymentType PaymentType, init CanopusService, mTransServ Midtra
 		}
 		mTransClient.New(mTransServ.ServerKey, environment)
 
+		mTransClient.ClientKey = mTransServ.ClientKey
 		return &MidtransPayment{
 			Client: mTransClient,
 		}
